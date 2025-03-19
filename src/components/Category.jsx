@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
-import { addCategory, deleteVideoCatergory, getAllCategories, getVideoDetailsById } from '../sevices/allApi';
+import { addCategory, deleteVideoCatergory, getAllCategories, getVideoDetailsById, updateCategory } from '../sevices/allApi';
 
 function Category() {
   const [show, setShow] = useState(false);
@@ -14,7 +14,6 @@ function Category() {
     setCategoryName("")
   }
   const handleShow = () => setShow(true);
-
   const [categoryName, setCategoryName] = useState("")
 
   const handeleAddCategory = async () => {
@@ -62,6 +61,7 @@ function Category() {
   const dragOver = (e) => {
     e.preventDefault()
     console.log("Inside dragOver");
+    getCategories()
 
   }
 
@@ -78,7 +78,7 @@ function Category() {
     setlectedCategory.allVideos.push(data);
     console.log("final category");
     console.log(setlectedCategory);
-    
+    const result_new= await updateCategory(id,setlectedCategory)
     
     
     
@@ -125,7 +125,15 @@ function Category() {
             <div className='d-flex justify-content-between align-items-center'>
               <h6>{item.categoryName}</h6>
               <button className='btn btn-danger' onClick={(e) => deleteCategory(item.id)}><i class="fa-solid fa-trash"></i></button>
-            </div>
+              </div>
+            {
+              item.allVideos?.length>0?
+              item.allVideos.map(video => (
+                  <img src={video.thumbnailUrl} alt="" style={{height:'150px',width:'100%'}} className='mt-2'/>
+              )):
+              <h6>No item found</h6>
+            }
+            
           </div>
         ))
       }
